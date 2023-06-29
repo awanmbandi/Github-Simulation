@@ -25,6 +25,8 @@
         <version>3.2.3</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
