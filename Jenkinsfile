@@ -1,18 +1,19 @@
 def COLOR_MAP = [
     'SUCCESS': 'good', 
     'FAILURE': 'danger',
+    'UNSTABLE': 'danger'
 ]
 pipeline {
   agent any
   environment {
     WORKSPACE = "${env.WORKSPACE}"
+    NEXUS_CREDENTIAL_ID = 'Nexus-Credential'
     //NEXUS_USER = "$NEXUS_CREDS_USR"
     //NEXUS_PASSWORD = "$Nexus-Token"
     //NEXUS_URL = "172.31.18.62:8081"
     //NEXUS_REPOSITORY = "maven_project"
     //NEXUS_REPO_ID    = "maven_project"
-    NEXUS_CREDENTIAL_ID = 'Nexus-Credential'
-    ARTVERSION = "${env.BUILD_ID}"
+    //ARTVERSION = "${env.BUILD_ID}"
   }
   tools {
     maven 'localMaven'
@@ -56,15 +57,15 @@ pipeline {
                 withCredentials([string(credentialsId: 'SonarQube-Token', variable: 'SONAR_TOKEN')]) {
                 sh """
                 mvn sonar:sonar \
-                -Dsonar.projectKey=jjtech-cicd-pipeline \
-                -Dsonar.host.url=http://172.31.83.105:9000 \
+                -Dsonar.projectKey=cicd-pipeline-project \
+                -Dsonar.host.url=http://172.31.23.58:9000 \
                 -Dsonar.login=$SONAR_TOKEN
                 """
                 }
             }
         }
     }
-    stage('SonarQube Gatekeeper') {
+    stage('SonarQube GateKeeper') {
         steps {
           timeout(time : 1, unit : 'HOURS'){
           waitForQualityGate abortPipeline: true
@@ -76,37 +77,37 @@ pipeline {
            nexusArtifactUploader(
               nexusVersion: 'nexus3',
               protocol: 'http',
-              nexusUrl: '172.31.82.36:8081',
+              nexusUrl: '172.31.16.85:8081',
               groupId: 'webapp',
               version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
-              repository: 'maven-project-release',  //"${NEXUS_REPOSITORY}",
+              repository: 'maven-project-releases',  //"${NEXUS_REPOSITORY}",
               credentialsId: "${NEXUS_CREDENTIAL_ID}",
               artifacts: [
                   [artifactId: 'webapp',
                   classifier: '',
-                  file: '/var/lib/jenkins/workspace/jenkins-complete-cicd-pipeline/webapp/target/webapp.war',
+                  file: "${WORKSPACE}/webapp/target/webapp.war",
                   type: 'war']
               ]
            )
         }
     }
-    stage('Deploy to Dev Env') {
+    stage('Deploy to Development Env') {
         environment {
             HOSTS = 'dev'
         }
         steps {
-            withCredentials([usernamePassword(credentialsId: 'ansible-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
-                sh "ansible-playbook -i ${WORKSPACE}/ansible-setup/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
+            withCredentials([usernamePassword(credentialsId: 'Ansible-Credential', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
+                sh "ansible-playbook -i ${WORKSPACE}/ansible-config/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
             }
         }
     }
-    stage('Deploy to Stage Env') {
+    stage('Deploy to Staging Env') {
         environment {
             HOSTS = 'stage'
         }
         steps {
-            withCredentials([usernamePassword(credentialsId: 'ansible-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
-                sh "ansible-playbook -i ${WORKSPACE}/ansible-setup/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
+            withCredentials([usernamePassword(credentialsId: 'Ansible-Credential', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
+                sh "ansible-playbook -i ${WORKSPACE}/ansible-config/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
             }
         }
     }
@@ -115,14 +116,13 @@ pipeline {
             input('Do you want to proceed?')
         }
     }
-    stage('Deploy to Prod Env') {
+    stage('Deploy to Production Env') {
         environment {
             HOSTS = 'prod'
         }
         steps {
-            withCredentials([usernamePassword(credentialsId: 'ansible-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
-                sh "ansible-playbook -i ${WORKSPACE}/ansible-setup/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
-            sh "sudo ansible aws_ec2 -i ${WORKSPACE}/ansible-setup/aws_ec2.yaml -m ping --private-key=${ANSIBLE_DEPLOYMENT_SSH_KEY} --user ec2-user"
+            withCredentials([usernamePassword(credentialsId: 'Ansible-Credential', passwordVariable: 'PASSWORD', usernameVariable: 'USER_NAME')]) {
+                sh "ansible-playbook -i ${WORKSPACE}/ansible-config/aws_ec2.yaml ${WORKSPACE}/deploy.yaml --extra-vars \"ansible_user=$USER_NAME ansible_password=$PASSWORD hosts=tag_Environment_$HOSTS workspace_path=$WORKSPACE\""
             }
          }
       }
@@ -130,12 +130,10 @@ pipeline {
   post {
     always {
         echo 'Slack Notifications.'
-        slackSend channel: '#cicd-project-alerts', //update and provide your channel name
+        slackSend channel: '#cicd-pipeline-project-alerts', //update and provide your channel name
         color: COLOR_MAP[currentBuild.currentResult],
-        message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
-        //${env.BUILD_ID}-${env.BUILD_TIMESTAMP}
+        message: "*${currentBuild.currentResult}:* Job Name '${env.JOB_NAME}' build ${env.BUILD_NUMBER} \n Build Timestamp: ${env.BUILD_TIMESTAMP} \n Project Workspace: ${env.WORKSPACE} \n More info at: ${env.BUILD_URL}"
     }
   }
 }
 
-//slackSend channel: '#mbandi-cloudformation-cicd', message: "Please find the pipeline status of the following ${env.JOB_NAME ${env.BUILD_NUMBER} ${env.BUILD_URL}"
