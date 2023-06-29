@@ -11,6 +11,10 @@
   <artifactId>mysql-connector-java</artifactId>
   <version>8.0.23</version>
   </dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.1.0</version> //Change the version as per your needs
+    <scope>provided</scope> //use provided if you are deploying war in a container
   </dependencies>
   <properties>
      <maven.compiler.source>1.8</maven.compiler.source>
