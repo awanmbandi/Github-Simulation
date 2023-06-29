@@ -28,7 +28,7 @@
 		class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top"
 		id="mainNav">
 		<div class="container">
-			<a class="navbar-brand" href="#page-top">Unique Developer</a>
+			<a class="navbar-brand" href="#page-top">Senior DevOps Engineer</a>
 			<button
 				class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded"
 				type="button" data-bs-toggle="collapse"
@@ -58,7 +58,7 @@
 			<img class="masthead-avatar mb-5" src="assets/img/avataaars.svg"
 				alt="..." />
 			<!-- Masthead Heading-->
-			<h1 class="masthead-heading text-uppercase mb-0">Welcome To Unique Developer</h1>
+			<h1 class="masthead-heading text-uppercase mb-0">Welcome To My Career Profile</h1>
 			<!-- Icon Divider-->
 			<div class="divider-custom divider-light">
 				<div class="divider-custom-line"></div>
@@ -69,7 +69,7 @@
 			</div>
 			<!-- Masthead Subheading-->
 			<p class="masthead-subheading font-weight-light mb-0">Java
-				Development - Web Development - Python</p>
+				DevOps - Infrastructure - Application - Automation - AWS</p>
 		</div>
 	</header>
 	<!-- Portfolio Section-->
@@ -315,7 +315,7 @@
 				<div class="col-lg-4 mb-5 mb-lg-0">
 					<h4 class="text-uppercase mb-4">Location</h4>
 					<p class="lead mb-0">
-						2215 John Daniel Drive <br /> Clark, MO 65243
+						1456 Sherwood Drive <br /> Alberta, PC T6H 5M3
 					</p>
 				</div>
 				<!-- Footer Social Icons-->
@@ -332,9 +332,9 @@
 				</div>
 				<!-- Footer About Text-->
 				<div class="col-lg-4">
-					<h4 class="text-uppercase mb-4">About Freelancer</h4>
+					<h4 class="text-uppercase mb-4">About My Journey</h4>
 					<p class="lead mb-0">
-						Freelance is a free to use, MIT licensed Bootstrap theme created
+						Free to use, MIT licensed Bootstrap theme created
 						by <a href="http://startbootstrap.com">Start Bootstrap</a> .
 					</p>
 				</div>
