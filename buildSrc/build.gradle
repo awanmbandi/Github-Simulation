@@ -13,11 +13,21 @@ plugins {
 
 apply plugin: 'war'
 
+/*
 repositories {
     mavenLocal()
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
+}
+*/
+
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+   providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
 }
 
 group = 'com.example.maven-project'
