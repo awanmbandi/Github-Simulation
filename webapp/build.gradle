@@ -97,6 +97,14 @@ task integrationTest(type: Test, dependsOn: 'test') {
     }
 }
 
+// Maven Publish
+publishing {
+    publications {
+        mavenWeb(MavenPublication) {
+            from components.web
+        }
+    }
+}
 
 // JFrog Artifact Upload
 artifactory {
