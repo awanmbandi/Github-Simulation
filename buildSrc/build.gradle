@@ -15,7 +15,7 @@ plugins {
 
 apply plugin: 'war'
 //apply plugin: 'org.akhikhl.gretty'
-//apply plugin: "com.jfrog.artifactory"
+apply plugin: "com.jfrog.artifactory"
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
