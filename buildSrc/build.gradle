@@ -9,8 +9,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id "com.jfrog.artifactory" version "4.18.3"
-    id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
+    //id "com.jfrog.artifactory" version "4.18.3"
+    //id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
 }
 
 apply plugin: 'war'
@@ -98,26 +98,5 @@ task integrationTest(type: Test, dependsOn: 'test') {
     }
 }
 
-//  SpotBugs Test
-subprojects {
-    //spot bugs reports generated only this way
-    apply plugin: 'com.github.spotbugs'
-    spotbugs {
-        toolVersion = '4.2.3'
-    }
 
-    tasks.withType(SpotBugsTask) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-}
-
-// PMD: SAST Tool, used for Static Code Analysis just like SonarQube
-pmd {
-  toolVersion = '6.0.0'
-  ruleSetConfig = rootProject.resources.text.fromFile('pmd/ruleset.xml')
-  ignoreFailures = true
-}
 

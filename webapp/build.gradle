@@ -6,7 +6,7 @@ plugins {
     //id 'com.example.maven-project.java-conventions'
     id 'war'
     id "com.jfrog.artifactory" version "4.18.3"
-    //id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
+    id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
 }
 
 //apply plugin: 'org.akhikhl.gretty'
@@ -14,7 +14,7 @@ apply plugin: "com.jfrog.artifactory"
 apply plugin: 'maven-publish'
 //apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
-//apply plugin: 'pmd'
+apply plugin: 'pmd'
 apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
 apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
 //apply plugin: 'findbugs'
@@ -49,6 +49,29 @@ checkstyle {
   toolVersion = '6.16.1'
   config = rootProject.resources.text.fromFile('checkstyle/rules/rules.xml')
   ignoreFailures = true
+}
+
+// PMD: SAST Tool, used for Static Code Analysis just like SonarQube
+pmd {
+  toolVersion = '6.0.0'
+  ruleSetConfig = rootProject.resources.text.fromFile('pmd/ruleset.xml')
+  ignoreFailures = true
+}
+
+//  SpotBugs Test
+subprojects {
+    //spot bugs reports generated only this way
+    apply plugin: 'com.github.spotbugs'
+    spotbugs {
+        toolVersion = '4.2.3'
+    }
+
+    tasks.withType(SpotBugsTask) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
 }
 
 // JFrog Artifact Upload
