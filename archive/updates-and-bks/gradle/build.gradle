@@ -186,6 +186,9 @@ gradle clean htmldependencyReport
 
 gradle clean projectReport //This Generates All "project-reports" reports including Task, Property and Dependency
 
+<<<<<<<<Upload ArtifactT>>>>>>>>>>>>
+gradle artifactoryPublish
+
 <<<<<<<<<<<<<<<<<<<<<<<<<<<Gradle Build Dashboard Report Plugin>>>>>>>>>>>>>>>>>>>>>>>>>>
 gradle clean build projectReport buildDashboard
 

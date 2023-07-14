@@ -50,12 +50,3 @@ tasks.withType(JavaCompile) {
     options.encoding = 'utf-8'
 }
 
-/*
-publishing {
-    publications {
-        mavenWeb(MavenPublication) {
-            from components.web
-        }
-    }
-}
-*/
