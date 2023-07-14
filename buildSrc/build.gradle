@@ -51,10 +51,20 @@ group = 'com.example.maven-project'
 version = '1.0-SNAPSHOT'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
+/*
 publishing {
     publications {
         maven(MavenPublication) {
             from(components.java)
+        }
+    }
+}
+*/
+
+publishing {
+    publications {
+        mavenWeb(MavenPublication) {
+            from components.web
         }
     }
 }
