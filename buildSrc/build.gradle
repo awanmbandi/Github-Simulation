@@ -58,7 +58,7 @@ tasks.withType(JavaCompile) {
     options.encoding = 'utf-8'
 }
 
-
+/*
 publishing {
     publications {
         maven(MavenPublication) {
@@ -66,6 +66,7 @@ publishing {
         }
     }
 }
+*/
 
 publishing {
     publications {
@@ -75,43 +76,4 @@ publishing {
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'utf-8'
-}
 
-/*
-//Unit and Integration Test
-test {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        excludeGroups 'integration'
-    }
-}
-
-task integrationTest(type: Test, dependsOn: 'test') {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        includeGroups 'integration'
-    }
-}
-
-//Unit and Integration Test
-test {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        excludeGroups 'integration'
-    }
-}
-*/
