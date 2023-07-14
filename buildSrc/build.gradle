@@ -53,6 +53,11 @@ group = 'com.example.maven-project'
 version = '1.0-SNAPSHOT'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
+// Compile Task
+tasks.withType(JavaCompile) {
+    options.encoding = 'utf-8'
+}
+
 /*
 publishing {
     publications {

@@ -80,11 +80,6 @@ subprojects {
     }
 }
 
-// Compile Task
-tasks.withType(JavaCompile) {
-    options.encoding = 'utf-8'
-}
-
 //Unit and Integration Test
 test {
     testLogging {
