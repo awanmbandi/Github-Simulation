@@ -113,8 +113,6 @@ test {
         excludeGroups 'integration'
     }
 }
-<<<<<<< HEAD
-=======
 
 // PMD: SAST Tool, used for Static Code Analysis just like SonarQube
 pmd {
