@@ -18,8 +18,6 @@ plugins {
     id 'java'
 }
 
-apply plugin: 'project-report'
-
 repositories {
    mavenCentral()
 }
