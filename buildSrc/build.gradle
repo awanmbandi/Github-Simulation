@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 //apply plugin: 'jacoco'
-apply plugin: 'checkstyle'
+//apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
 apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
@@ -121,9 +121,3 @@ pmd {
   ignoreFailures = true
 }
 
-// Checkstyle SAST tool for compliant with specified coding rules
-checkstyle {
-  toolVersion = '6.16.1'
-  config = rootProject.resources.text.fromFile('checkstyle/rules/rules.xml')
-  ignoreFailures = true
-}
