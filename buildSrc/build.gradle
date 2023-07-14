@@ -113,15 +113,3 @@ test {
         excludeGroups 'integration'
     }
 }
-
-task integrationTest(type: Test, dependsOn: 'test') {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        includeGroups 'integration'
-    }
-}
-
