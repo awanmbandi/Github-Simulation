@@ -29,17 +29,11 @@ allprojects {
   }
 }
 */
-version = "1.1"
 
-// Default Build Task
-defaultTasks 'clean', 'build'
-
-// Project Plugin/Dependency Repository
 repositories {
    mavenCentral()
 }
 
-// Project Dependencies
 dependencies {
     providedCompile 'javax.servlet:servlet-api:2.5'
     providedCompile 'javax.servlet.jsp:jsp-api:2.2'
@@ -80,6 +74,7 @@ subprojects {
     }
 }
 
+<<<<<<< HEAD
 /*
 //Unit and Integration Test
 test {
@@ -105,6 +100,8 @@ task integrationTest(type: Test, dependsOn: 'test') {
 }
 */
 
+=======
+>>>>>>> parent of 8c87149 (updated Unit, Integration Test, PMD and SpotBug)
 // JFrog Artifact Upload
 artifactory {
     contextUrl = "${artifactory_contextUrl}"
