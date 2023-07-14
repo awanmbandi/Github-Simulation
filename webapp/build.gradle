@@ -75,7 +75,6 @@ subprojects {
 }
 
 
-/*
 //Unit and Integration Test
 test {
     testLogging {
@@ -98,7 +97,7 @@ task integrationTest(type: Test, dependsOn: 'test') {
         includeGroups 'integration'
     }
 }
-*/
+
 
 // JFrog Artifact Upload
 artifactory {
