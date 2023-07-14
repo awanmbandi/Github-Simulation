@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 //apply plugin: 'jacoco'
 //apply plugin: 'checkstyle'
 //apply plugin: 'pmd'
-//apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
+apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
 //apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
 //apply plugin: 'findbugs'
 //apply plugin: "com.github.spotbugs"
