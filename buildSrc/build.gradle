@@ -17,18 +17,18 @@ apply plugin: 'war'
 //apply plugin: 'org.akhikhl.gretty'
 //apply plugin: "com.jfrog.artifactory"
 apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+//apply plugin: 'eclipse'
+//apply plugin: 'idea'
 //apply plugin: 'jacoco'
 //apply plugin: 'checkstyle'
-apply plugin: 'pmd'
-apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
-apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
+//apply plugin: 'pmd'
+//apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
+//apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
 //apply plugin: 'findbugs'
 //apply plugin: "com.github.spotbugs"
 
 // Artifact Secondary Folder Name/Version
-version = "1.1"
+//version = "1.1"
 
 defaultTasks 'clean', 'build'
 
@@ -61,7 +61,6 @@ publishing {
         }
     }
 }
-*/
 
 publishing {
     publications {
@@ -70,33 +69,7 @@ publishing {
         }
     }
 }
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'utf-8'
-}
-
-//Unit and Integration Test
-test {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        excludeGroups 'integration'
-    }
-}
-
-task integrationTest(type: Test, dependsOn: 'test') {
-    testLogging {
-        // show standard out and standard error of the test JVM(s) on the console
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-    useTestNG() {
-        includeGroups 'integration'
-    }
-}
+*/
 
 
 
