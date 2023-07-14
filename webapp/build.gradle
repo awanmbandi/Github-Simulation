@@ -5,6 +5,8 @@
 plugins {
     //id 'com.example.maven-project.java-conventions'
     id 'war'
+    id "com.jfrog.artifactory" version "4.18.3"
+    id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
 }
 
 /*
@@ -22,6 +24,7 @@ repositories {
 }
 
 dependencies {
+    classpath 'org.akhikhl.gretty:gretty:+'
     providedCompile 'javax.servlet:servlet-api:2.5'
     providedCompile 'javax.servlet.jsp:jsp-api:2.2'
     //compile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp', version: '2.0.0'
@@ -30,3 +33,19 @@ dependencies {
 }
 
 description = 'Webapp'
+
+//  SpotBugs Test
+subprojects {
+    //spot bugs reports generated only this way
+    apply plugin: 'com.github.spotbugs'
+    spotbugs {
+        toolVersion = '4.2.3'
+    }
+
+    tasks.withType(SpotBugsTask) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+}
