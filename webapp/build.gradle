@@ -9,6 +9,17 @@ plugins {
     id 'com.github.spotbugs' version '5.0.14' apply false // Generates HTML based Reports
 }
 
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+//apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'project-report'  // Generates Reports and Provide Nice HTML Vidual For Reports Such as "Build", "Configs" and "Dependencies"
+apply plugin: 'build-dashboard' // Generates HTML based Reports for tools like CheckStyke, FindBugs, Jacoco, HTML Dependency, PMD, Java Unit Test
+//apply plugin: 'findbugs'
+//apply plugin: "com.github.spotbugs"
+
 /*
 allprojects {
   repositories {
@@ -33,18 +44,3 @@ dependencies {
 
 description = 'Webapp'
 
-//  SpotBugs Test
-subprojects {
-    //spot bugs reports generated only this way
-    apply plugin: 'com.github.spotbugs'
-    spotbugs {
-        toolVersion = '4.2.3'
-    }
-
-    tasks.withType(SpotBugsTask) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-}
