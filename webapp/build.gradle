@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    classpath 'org.akhikhl.gretty:gretty:+'
     providedCompile 'javax.servlet:servlet-api:2.5'
     providedCompile 'javax.servlet.jsp:jsp-api:2.2'
     //compile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp', version: '2.0.0'
