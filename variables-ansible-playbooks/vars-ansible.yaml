@@ -1,0 +1,9 @@
+---
+hosts:         webservers
+become:        yes
+service_name1: nginx
+tasks1_name:   installing nginx
+state1:        present
+tasks2_name:   restarting nginx
+state2:        restarted
+service_name2: nginx

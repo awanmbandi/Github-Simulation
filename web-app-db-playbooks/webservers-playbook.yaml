@@ -1,0 +1,18 @@
+---
+# The 3 "dashes" at the Top left hand conner signifies that this is a playbook
+# Every Ansible Playbook MUST have the above 3 dashes with "VARIABLES" being an exception
+# This playbook has one Play 
+# which is made up of a target (webservers) and two tasks 
+ - hosts: webservers
+   become: yes
+   tasks:
+   # Task 1: Installing Apache (httpd)
+   - name: Install latest version of Apache in Production
+     yum:
+      name: httpd
+      state: present
+   # Task 2: Starting Apache (httpd)
+   - name: Restarting the apache2 service in Production
+     service: 
+      name: httpd
+      state: started    #or started
