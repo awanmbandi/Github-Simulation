@@ -3,7 +3,8 @@
    hosts: "{{ hosts }}"
    become: "{{ become }}"
    vars_files:
-     - /home/ansible/playbooks/variables-ansible/vars-ansible.yaml
+     - /home/ansible/Github-Simulation/variables-ansible-playbooks/vars-ansible.yaml
+   # - /home/ansible/playbooks/variables-ansible/vars-ansible.yaml
    # MAKE SURE YOU ADD THE vars_files and provide your VARIABLE FILE PATH Then only will it work
    # You must provide the PATH to your VARS file as DECLARED ABOVE.
    # That's the Declarative Syntax For Ansible Variable Files (That are define seperately from the main playbooks)
