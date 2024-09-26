@@ -1,0 +1,317 @@
+AN ANSIBLE PLAYBOOKS CONSIST OF THE FOLLOWING
+1) A Task 
+2) A Play (A play consit of a Task and Target)
+3) A Playbook
+#=====================================================================================
+
+---
+ - hosts: webservers
+   #become: yes
+   tasks: #Every Indivual Task In A Task Section Must Start With A Dash "-" . Its a MUST. 
+   - name: Installing httpd  #Each task can have any number of lines
+     yum: name=httpd state=present  # This is an example task LINE
+   - name: Installing ntp software
+     yum: name=ntp state=present
+
+
+
+---
+ - hosts: 
+   become: 
+   tasks:
+   - name: 
+     yum:
+      name: 
+      state: 
+
+
+#=====================================================================================
+Now if you look at the above playbook, if you need to execute it you MUST run the 
+ansible-playbook "your playbook" command. If you want to avoid this by executing your playbooks
+just like you'll execute a shell script then you need to change the 3 DASHES at the TOP of your 
+playbook to the ansible BINARY PLAYBOOK PATH. To get the PATH run
+
+--> which ansible-playbook (Copy the PATH and Delete the three dashes of your playbook
+and replace it with the PATH you copied BUT pass the #!"PATH". 
+--> Example: #!/usr/bin/ansible-playbook
+
+#!/usr/bin/ansible-playbook
+ - hosts: webservers
+   #become: yes
+   tasks: 
+   - name: Installing httpd 
+     yum: name=httpd state=present
+   - name: Installing ntp software
+     yum: name=ntp state=present
+
+--> Save the File
+--> chmod +x "the updated playbook or new playbook"
+--> ./install-yum-pkg.yml  (Execute Your Playbook)
+
+2) HOW TO VALIDATE AND CHECK FOR SYNTAX ERRORS IN YOUR PLAYBOOK
+--> ansible-playbook install-yum-pkg.yml --syntax-check  (To Validate Your Playbook Before Running)
+--> ./install-yum-pkg.yml --syntax-check  (You can as well use this COMMAND for SYNTAX Check.
+You can Misplace any of the KEYS in your Playbook to TEST this out. It will PICK the ERROR)
+
+3) HOW TO DO A DRYRUN OF YOUR PLAYBOOKS BEFORE EXECUTION (Run the below command. This is Most often
+useful if you want to check what CHANGES are going to be made after the EXECUTION of PLAYBOOKS)
+
+--> sudo yum remove httpd  (Before Demo the check, REMOVE all installed packages by playbook on NODES)
+--> ansible-playbook install-yum-pkg.yml --check   (This command does a Dryrun of Your Playbooks)
+--> systemctl httpd status  (Run this on your Target Nodes and you'll realize the package was not
+installed. Because you were just running a CHANGE CHECK. THIS IS VERY USEFUL)
+--> systemctl ntp status  (Same thing...)
+--> ansible-playbook install-yum-pkg.yml  (Once you remove the --check, the playbook will now get executed)
+
+4) EXECUTE PLAYBOOKS AND GET VERBOSE LOGS. TO GET ALL NODES ACTIVITIES PERFORMED BY ANSIBLE
+--> ansible-playbook install-yum-pkg.yml -v or -vv or -vvv or -vvvvvvvvvvv    
+(This will GIVE you a detail rundown of all the execution STEPS ansible is taking in the NODES, 
+from connecting to the specific INSTALLATIONS. The more v's the detail your VERBOSE LOG)
+
+=====================================================================
+=====================================================================
+=====================================================================
+     Configure Environment and Deploy Sample App Example Project
+=====================================================================
+=====================================================================
+=====================================================================
+2) We are going to setup/configure apache for our webservers, mysql for our database 
+and deploy a sample web page or application
+
+1) Launch 3 instances using the JJTech-Ansible-Master Community AMI: ami-0d2e8aef860f34f4e or search "JJTech"
+- In North Virginia because that is were the AMI is
+- Open port 22 and port 80 to anywhere
+- Launch with a keypair you have access to, if not create a new one 
+- Name your instances master, webserver and dbserver
+- SSH into all 3 servers # If you're using EC2 connect make, sure to change from "root" to ec2-user before you can login
+- Run: sudo hostnamectl set-hostname master # Do the same on your webserver and dbservers using their names
+- Run: sudo passwd ansible # To Update the ansible user password (password: ansible). Do the same on your webserver and dbserver
+- Run: sudo vi /etc/ansible/hosts # In the Webservers inventory: provide ip, dbservers: uncomment and provide ip. Save and Quit. NOTE: This action should only be carried out on the master.
+- Run: sudo vi /etc/ssh/sshd_config # Change PasswordAuthentication to yes (lowercase yes) on master, webserver and dbserver
+- Run: sudo systemctl restart sshd # On master, webserver and dbserver
+- Run: sudo systemctl enable sshd # On master, webserver and dbserver
+- Run: exit # And Login back as your ansible user and make sure to confirm you can login (ssh ansible@MasterIP). Do thesame on your webserver and dbserver and confirm you can login as ansible
+- NOTE: TEST CONNECTION to webserver and dbserver by running ssh ansible@ip (webserver ip, dbserver ip).
+- Stop your instances and start them before Today's class
+- Setup Snipets for Ansible Playbook
+
+
+
+=====================================================================
+            EXAMPLE PLAYBOOKS | Above Project Playbooks
+=====================================================================
+Example 1: copying a file from your ansible host to remote notes
+=====================================================================
+---
+# This playbook has just a single play
+# And one task
+# Create a file called index.html in /home/ec2-user/ on the master
+ - hosts: webservers # Inventory // A Play // An Object
+   become: yes # Become root // 2nd Object
+   tasks: # Task with a List // 3rd Oject
+   - name: Ensure the index.html file is in place # 1st Task with a list (copy)
+     copy: # Module // This is a List
+       src: /home/ansible/index.html
+       dest: /var/www/html
+
+======================================================================
+Example 2: Installing and starting the the apache (httpd) service
+======================================================================
+---
+# This playbook has just a single play 
+# And Two tasks 
+ - hosts: webservers
+   become: yes
+   tasks:
+   - name: Install latest version of httpd (apache)
+     yum:
+      name: httpd
+      state: present
+   - name: Restarting the httpd (apache) service
+     service: 
+      name: httpd
+      state: restarted
+
+---
+# Same Playbook as above but more Dynamic using Variables 
+# You can as well take out the Variables in the file and place in a seperate file
+# This playbook has just a single play
+# And Two tasks
+ - hosts: webservers
+   vars:
+     package: httpd
+     module_state: present
+     service_state: restarted
+   become: yes
+   tasks:
+   - name: Install latest version of httpd (apache)
+     yum:
+      name: "{{ package }}"
+      state: "{{ module_state }}"
+   - name: Restarting the httpd (apache) service
+     service: 
+      name: "{{ package }}"
+      state: "{{ service_state }}"
+
+======================================================================
+Example 2: Installing and starting the httpd service and mysql
+======================================================================
+---
+# Because we are dealing with two different environments we can't pass the two executions.. (next line)
+# within a single play because the host targets ae different (webservers and dbservers)
+# First Play
+# This playbook has two plays and three tasks 
+ - hosts: webservers
+   become: yes
+   tasks:
+   - name: Install latest version of Apache
+     yum:
+      name: httpd
+      state: present
+   - name: Restarting the apache2 service
+     service: 
+      name: httpd
+      state: restarted
+
+# Second Play with a single task
+ - hosts: dbservers
+   become: yes
+   tasks:
+   - name: Install latest version of mysql
+     yum:
+      name: mysql
+      state: latest
+
+
+
+
+
+
+# THE END FOR STATIC
+
+
+
+
+
+
+
+
+======================================================================
+======================================================================
+======================================================================
+======================================================================
+Example 2: Installing and starting the apache2 service
+======================================================================
+---
+ - hosts: ec2
+   become: yes
+   tasks:
+   - name: Install latest version of Apache
+     apt:
+      name: apache2
+      update_cache: yes 
+      state: latest
+   - name: Restarting the apache2 service
+     service: 
+      name: apache2
+      state: restarted
+
+
+# service apache2 status
+# Make sure to double check to make sure the apache2 service is running
+========================================================================
+Example 3: Creating a user called George and it could be any user
+========================================================================
+---
+ - hosts: ec2
+   become: yes
+   tasks:
+   - name: Ensure user George exists
+     user:
+      name: George
+      # password: "{{ 'mypassword' | password_hash('gHYT2678') }}"  
+      # You can do the password as another demo
+      state: present
+
+
+=========================================================================
+Exaple 4: Starting and Reloading the sshd service
+=========================================================================
+---
+ - hosts: ec2
+   become: yes
+   tasks:
+   - name: starting the sshd service
+     service:
+      name: sshd
+      state: started
+   - name: reloading the sshd service
+     service:
+      name: sshd
+      state: reloaded
+
+===============================================================================
+===============================================================================
+PLEASE UPDATE Your service-ansible-playbook.yaml or httpd-ansible-playbook.yaml 
+and vars-ansible.yaml Files Using The Updated Copies Below. 
+- You Only Have To Update The httpd-ansible-playbook.yaml and Add The Bellow 
+Line Of Code.
+
+  vars_files:  # THIS OBJECT WAS MISSED MAKE SURE TO ADD IT FOR IT TO WORK
+    - /home/ansible/playbooks/variables-ansible/vars-ansible.yaml
+===============================================================================
+HERE'S YOUR service-ansible-playbook.yaml
+===============================================================================
+---
+ - name: setting up services on webservers
+   hosts: "{{ hosts }}"
+   become: "{{ become }}"
+   vars_files:
+     - /home/ansible/playbooks/variables-ansible/vars-ansible.yaml
+   # MAKE SURE YOU ADD THE vars_files and provide your VARIABLE FILE PATH Then only will it work
+   # You must provide the PATH to your VARS file as DECLARED ABOVE.
+   # That's the Declarative Syntax For Ansible Variable Files (That are define seperately from the main playbooks)
+   tasks:
+   - name: "{{ tasks1_name }}"
+     yum:
+       name: "{{ service_name1 }}"
+       state: "{{ state1 }}"
+   - name: "{{ tasks2_name }}"
+     service:
+       name: "{{ service_name2 }}"
+       state: "{{ state2 }}"
+
+===============================================================================
+HERE'S YOUR VARIABLE FILE (vars-ansible.yaml)
+===============================================================================
+---
+hosts: webservers
+become: yes
+service_name1: nginx
+tasks1_name: installing nginx
+state1: present
+tasks2_name: restarting nginx
+state2: restarted
+service_name2: nginx
+
+===============================================================================
+EXECURION COMMANDS: 
+- ansible-playbook service-ansible-playbook.yaml --syntax-check
+- ansible-playbook service-ansible-playbook.yaml  (Do Not Add The Variable File
+because you already defined the PATH in service-ansible-playbook.yaml)
+- IT SHOULD SUCCEED
+===============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+

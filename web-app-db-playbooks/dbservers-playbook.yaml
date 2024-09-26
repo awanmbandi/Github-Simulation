@@ -1,0 +1,13 @@
+---
+# The 3 "dashes" at the Top left hand conner signifies that this is a playbook
+# Every Ansible Playbook MUST have the above 3 dashes with "VARIABLES" being an exception
+# This playbook has only one Play 
+# which is made up of a single target (dbservers) and a single task
+ - hosts: dbservers
+   become: yes
+   tasks:
+   # Task 1: Installing mysql RDBMS
+   - name: Installing mysql RDBMS in Production
+     yum:
+      name: mysql
+      state: latest

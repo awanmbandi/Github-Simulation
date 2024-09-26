@@ -1,0 +1,16 @@
+---
+# The 3 "dashes" at the Top left hand conner signifies that this is a playbook
+# Every Ansible Playbook MUST have the above 3 dashes with "VARIABLES" being an exception
+ - hosts: 
+   become: 
+   tasks:
+   # Task 1: 
+   - name: 
+     yum:
+      name: 
+      state: 
+   # Task 2: 
+   - name: 
+     service: 
+      name: 
+      state: 
